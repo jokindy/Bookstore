@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-books-table
+      author: jokindy
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: books
+      changes:
+        - createSequence:
+            sequenceName: books_table_id_seq
+        - createTable:
+            tableName: books
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                  defaultValueSequenceNext: books_table_id_seq
+              - column:
+                  name: title
+                  type: varchar(85)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: year_of_release
+                  type: int
+                  constraints:
+                    nullable: true

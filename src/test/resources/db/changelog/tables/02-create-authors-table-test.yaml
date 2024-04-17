@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-authors-table
+      author: jokindy
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: authors
+      changes:
+        - createSequence:
+            sequenceName: authors_table_id_seq
+        - createTable:
+            tableName: authors
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                  defaultValueSequenceNext: authors_table_id_seq
+              - column:
+                  name: name
+                  type: varchar(85)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: birthdate
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: country_of_origin
+                  type: varchar(85)
+                  constraints:
+                    nullable: true

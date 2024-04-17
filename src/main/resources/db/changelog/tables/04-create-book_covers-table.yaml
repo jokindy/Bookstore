@@ -1,0 +1,32 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-book_covers-table
+      author: jokindy
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: book_covers
+      changes:
+        - createSequence:
+            sequenceName: book_covers_table_id_seq
+        - createTable:
+            tableName: book_covers
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                  defaultValueSequenceNext: book_covers_table_id_seq
+              - column:
+                  name: content
+                  type: bytea
+                  constraints:
+                    nullable: false
+              - column:
+                  name: book_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: book_id_cover_fk
+                    references: books(id)
