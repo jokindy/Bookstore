@@ -6,7 +6,7 @@ import org.mapstruct.Mapping;
 import org.springframework.data.domain.Page;
 
 @MapperConfig
-public interface CommonMapper<T, S, R> {
+public interface CommonMapper<T, S> {
 
   @Mapping(target = "content", source = "content")
   @Mapping(target = "pageSize", source = "pageable.pageSize")
@@ -18,5 +18,5 @@ public interface CommonMapper<T, S, R> {
   @Mapping(target = "pageSize", source = "pageable.pageSize")
   @Mapping(target = "totalElements", source = "totalElements")
   @Mapping(target = "pageNumber", source = "number")
-  PageableResultDto<R> toPageableResult2Dto(Page<R> books);
+  PageableResultDto<String> toPageableResultStringDto(Page<String> books);
 }

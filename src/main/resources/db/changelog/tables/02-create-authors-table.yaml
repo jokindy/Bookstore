@@ -34,3 +34,6 @@ databaseChangeLog:
                   type: varchar(85)
                   constraints:
                     nullable: true
+        - addUniqueConstraint:
+            tableName: authors
+            columnNames: name, birthdate

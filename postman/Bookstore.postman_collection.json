@@ -1,0 +1,479 @@
+{
+	"info": {
+		"_postman_id": "c93dfe15-f33a-4cec-80f0-5ace7e3ffa98",
+		"name": "Bookstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20479728",
+		"_collection_link": "https://galactic-rocket-2753.postman.co/workspace/BookStore~80e009a7-295f-41f2-b2b0-c069e6672fc7/collection/20479728-c93dfe15-f33a-4cec-80f0-5ace7e3ffa98?action=share&source=collection_link&creator=20479728"
+	},
+	"item": [
+		{
+			"name": "Security",
+			"item": [
+				{
+					"name": "Get token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "{{user_username}}",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "{{user_password}}",
+									"type": "text"
+								},
+								{
+									"key": "grant_type",
+									"value": "{{grant_type}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8484/realms/BookStore/protocol/openid-connect/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8484",
+							"path": [
+								"realms",
+								"BookStore",
+								"protocol",
+								"openid-connect",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User endpoints",
+			"item": [
+				{
+					"name": "Get all books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{service_direct_url}}/books",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get unique books",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{service_direct_url}}/books/unique",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books",
+								"unique"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all books by authors name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{service_direct_url}}/books/name?authorName=Madame Web",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books",
+								"name"
+							],
+							"query": [
+								{
+									"key": "pageSize",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "pageNumber",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "authorName",
+									"value": "Madame Web"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get book by id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titile\": \"11.22.63\",\r\n    \"yearOfRelease\": 2011,\r\n    \"authors\": [\r\n        {\r\n            \"name\": \"Valera\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_direct_url}}/books/:bookId",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books",
+								":bookId"
+							],
+							"variable": [
+								{
+									"key": "bookId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const postRequest = {\r",
+							"  url: pm.environment.get(\"keycloak_server\") + '/realms/'+ pm.environment.get(\"realm_name\") + '/protocol/openid-connect/token',\r",
+							"  method: 'POST',\r",
+							"  timeout: 0,\r",
+							"  header: {\r",
+							"    \"Content-Type\": \"application/x-www-form-urlencoded\"\r",
+							"  },\r",
+							"  body: {\r",
+							"    mode: 'urlencoded',\r",
+							"    urlencoded: [\r",
+							"        {key: \"grant_type\", value: \"password\"},\r",
+							"        {key:\"client_id\", value: pm.environment.get(\"client_id\")},\r",
+							"        {key:\"username\", value: pm.environment.get(\"user_username\")},\r",
+							"        {key:\"password\", value: pm.environment.get(\"user_password\")},\r",
+							"    ]}\r",
+							"};\r",
+							"pm.sendRequest(postRequest, function (err, res) {\r",
+							"    var responseJson = res.json();\r",
+							"    pm.environment.set('access_token', responseJson['access_token']);\r",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Admin endpoints",
+			"item": [
+				{
+					"name": "POST new book",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cover",
+									"type": "file",
+									"src": [
+										"/C:/Users/Андрей/Pictures/photo_2022-08-15_01-48-20.jpg",
+										"/C:/Users/Андрей/Pictures/photo_2022-08-15_01-48-20.jpg"
+									]
+								},
+								{
+									"key": "title",
+									"value": "Holy Bible",
+									"type": "text"
+								},
+								{
+									"key": "yearOfRelease",
+									"value": "1474",
+									"type": "text"
+								},
+								{
+									"key": "authorIds",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{service_direct_url}}/books",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT new book",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cover",
+									"type": "file",
+									"src": "/C:/Users/Андрей/Pictures/photo_2022-05-05_13-47-09.jpg"
+								},
+								{
+									"key": "title",
+									"value": "ASZAZAZA",
+									"type": "text"
+								},
+								{
+									"key": "yearOfRelease",
+									"value": "2022",
+									"type": "text"
+								},
+								{
+									"key": "authorIds",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "authorIds",
+									"value": "4",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{service_direct_url}}/books",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "cover",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST new author",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJFM2s1VnpPZG5JYjNKTlpJRTJvTnplNElUdzd3b2U1NFVDQnNoaHdqUDNZIn0.eyJleHAiOjE3MTMzNjcwNzksImlhdCI6MTcxMzM2Njc3OSwianRpIjoiOWY3M2FiNDktNGFhMS00NjUwLTlmMTQtM2Y3ZTg1OWEzYWQ5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4NDg0L3JlYWxtcy9Cb29rU3RvcmUiLCJzdWIiOiJlNWQwM2RjMC0wYjY0LTQ5YmUtOTU1MS01MmEzOWVhZGZmZmMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJsb2dpbi1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiMmYxOTE1NzItY2ZjMy00MDYxLTk3OTYtOWM5YTQwNGNiZGEyIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImFwcF91c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsibG9naW4tYXBwIjp7InJvbGVzIjpbInVzZXIiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiIyZjE5MTU3Mi1jZmMzLTQwNjEtOTc5Ni05YzlhNDA0Y2JkYTIiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkpvaG4gRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidXNlcjEiLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huZG9lQG1haWwuY29tIn0.G_i_xGFo_Hh2kxPnTpZekVxLUVn3pNe5mNOlFn4lFiSn1ru_Bqr2gtZp_ldaQh8O55-d5oC5BXzOeIrcIwa0WRgf3dLrQhLdDwuT1Uf9xh8PxU0JHwG0QR6y1CPbC1cQ2QGkyeAIR2v1QTUYnQQuFHyomyDSPw-DdASusnTrOpZYE0tO8uueDF85VyLjE5enZ0Hr23UWcyHfb35hV1xl7xqg8ucQWVoFDLOF0h0ZomInxJ82cxei8u0u3zVchkGnOUA5ZkA3wuzH2DKxbIUWt2R8Ec-lTdzWQ3je7EaomfBQ7DuIVtR2W3OZ4oV83rw3hJx9S4jeVjb5sZ2Ay7LJKQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Madame Web\",\r\n    \"birthdate\": \"1985-04-04\",\r\n    \"countryOfOrigin\": \"Spider-Verse\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_direct_url}}/authors",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"authors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete book",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"titile\": \"11.22.63\",\r\n    \"yearOfRelease\": 2011,\r\n    \"authors\": [\r\n        {\r\n            \"name\": \"Valera\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{service_direct_url}}/books/:bookId",
+							"host": [
+								"{{service_direct_url}}"
+							],
+							"path": [
+								"books",
+								":bookId"
+							],
+							"variable": [
+								{
+									"key": "bookId",
+									"value": "33"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{access_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const postRequest = {\r",
+							"  url: pm.environment.get(\"keycloak_server\") + '/realms/'+ pm.environment.get(\"realm_name\") + '/protocol/openid-connect/token',\r",
+							"  method: 'POST',\r",
+							"  timeout: 0,\r",
+							"  header: {\r",
+							"    \"Content-Type\": \"application/x-www-form-urlencoded\"\r",
+							"  },\r",
+							"  body: {\r",
+							"    mode: 'urlencoded',\r",
+							"    urlencoded: [\r",
+							"        {key: \"grant_type\", value: \"password\"},\r",
+							"        {key:\"client_id\", value: pm.environment.get(\"client_id\")},\r",
+							"        {key:\"username\", value: pm.environment.get(\"admin_username\")},\r",
+							"        {key:\"password\", value: pm.environment.get(\"admin_password\")},\r",
+							"    ]}\r",
+							"};\r",
+							"pm.sendRequest(postRequest, function (err, res) {\r",
+							"    var responseJson = res.json();\r",
+							"    pm.environment.set('access_token', responseJson['access_token']);\r",
+							"});"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

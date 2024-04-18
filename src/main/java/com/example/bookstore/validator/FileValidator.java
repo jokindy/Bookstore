@@ -1,14 +1,15 @@
 package com.example.bookstore.validator;
 
-import static com.example.bookstore.util.CommonConstants.BOOK_COVER;
-import static com.example.bookstore.util.CommonConstants.BOOK_COVER_EXTENSION;
-import static com.example.bookstore.util.CommonConstants.NO_AUTHOR_FOUND;
+import static com.example.bookstore.util.CommonConstants.*;
 import static java.util.Objects.isNull;
 
+import com.example.bookstore.error.ErrorDto;
 import com.example.bookstore.error.GeneralException;
 import com.example.bookstore.util.ErrorCode;
-import com.example.bookstore.util.ExceptionErrorBodyBuilder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,28 +17,27 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileValidator {
 
   public static void validateBookCover(MultipartFile file) {
-    List<Map<String, Object>> errors = new ArrayList<>();
+    List<ErrorDto> errors = new ArrayList<>();
 
     if (isNull(file) || file.isEmpty()) {
-      errors.addAll(
-          ExceptionErrorBodyBuilder.builder()
-              .errorCode(ErrorCode.BS03)
+      errors.add(
+          ErrorDto.builder()
+              .errorCode(ErrorCode.BS03.getCode())
               .description(ErrorCode.BS03.getDescription())
               .invalidParameter(BOOK_COVER)
               .build());
-    }
-
-    if (isNull(file.getOriginalFilename()) || !isValidExtension(file.getOriginalFilename())) {
-      errors.addAll(
-          ExceptionErrorBodyBuilder.builder()
-              .errorCode(ErrorCode.BS04)
+    } else if (isNull(file.getOriginalFilename())
+        || !isValidExtension(file.getOriginalFilename())) {
+      errors.add(
+          ErrorDto.builder()
+              .errorCode(ErrorCode.BS04.getCode())
               .description(ErrorCode.BS04.getDescription())
               .invalidParameter(BOOK_COVER_EXTENSION)
               .build());
     }
 
     if (!errors.isEmpty()) {
-      throw new GeneralException(HttpStatus.BAD_REQUEST.value(), NO_AUTHOR_FOUND, errors);
+      throw new GeneralException(HttpStatus.BAD_REQUEST.value(), errors);
     }
   }
 

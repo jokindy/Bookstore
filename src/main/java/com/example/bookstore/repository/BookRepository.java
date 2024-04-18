@@ -5,15 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Query("SELECT a.books FROM Author a WHERE a.name = :authorName")
-    List<Book> findBooksByAuthorName(@Param("authorName") String authorName);
+  Page<Book> findByAuthors_Name(String authorName, Pageable pageable);
 
-    @Query("SELECT DISTINCT b.title FROM Book b")
-    Page<String> findDistinctBooks(Pageable pageable);
+  @Query("SELECT DISTINCT b.title FROM Book b")
+  Page<String> findDistinctBooks(Pageable pageable);
 }

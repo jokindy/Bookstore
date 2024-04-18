@@ -21,12 +21,11 @@ public class BookCoverServiceImpl implements BookCoverService {
   @SneakyThrows
   @Transactional
   public void saveBookCover(Book book, MultipartFile cover) {
-    BookCover bookCover = new BookCover();
     FileValidator.validateBookCover(cover);
+
+    BookCover bookCover = new BookCover();
     bookCover.setContent(cover.getBytes());
     bookCover.setBook(book);
     bookCoverRepository.save(bookCover);
   }
-
-
 }

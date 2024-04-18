@@ -1,12 +1,17 @@
 package com.example.bookstore.service.impl;
 
-import static com.example.bookstore.util.CommonConstants.NO_AUTHOR_FOUND;
-import static com.example.bookstore.util.CommonConstants.NO_BOOK_FOUND;
-import static com.example.bookstore.util.ExceptionErrorBodyBuilder.builder;
+import static com.example.bookstore.util.CommonConstants.AUTHOR_ID;
+import static com.example.bookstore.util.CommonConstants.BOOK_ID;
 
 import com.example.bookstore.domain.Author;
 import com.example.bookstore.domain.Book;
-import com.example.bookstore.dto.*;
+import com.example.bookstore.dto.BookDto;
+import com.example.bookstore.dto.BookDtoWithoutCover;
+import com.example.bookstore.dto.CreateBookRequest;
+import com.example.bookstore.dto.CreateBookResponse;
+import com.example.bookstore.dto.PageableResultDto;
+import com.example.bookstore.dto.UpdateBookRequest;
+import com.example.bookstore.error.ErrorDto;
 import com.example.bookstore.error.GeneralException;
 import com.example.bookstore.mapper.BookMapper;
 import com.example.bookstore.repository.AuthorRepository;
@@ -18,12 +23,9 @@ import com.example.bookstore.validator.FileValidator;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -45,13 +47,13 @@ public class BookServiceImpl implements BookService {
 
   @Override
   public PageableResultDto<String> getUniqueBooks(Pageable pageable) {
-    return bookMapper.toPageableResult2Dto(bookRepository.findDistinctBooks(pageable));
+    return bookMapper.toPageableResultStringDto(bookRepository.findDistinctBooks(pageable));
   }
 
   @Override
-  public PageableResultDto<BookDtoWithoutCover> getBooksByAuthorName(String name, Pageable pageable) {
-    List<Book> books = bookRepository.findBooksByAuthorName(name);
-    return bookMapper.toPageableResultDto(toPage(books, pageable));
+  public PageableResultDto<BookDtoWithoutCover> getBooksByAuthorName(
+      String name, Pageable pageable) {
+    return bookMapper.toPageableResultDto(bookRepository.findByAuthors_Name(name, pageable));
   }
 
   @Override
@@ -97,29 +99,34 @@ public class BookServiceImpl implements BookService {
         bookRepository::delete,
         () -> {
           throw new GeneralException(
-              HttpStatus.NOT_FOUND.value(), NO_AUTHOR_FOUND, new ArrayList<>());
+              HttpStatus.NOT_FOUND.value(),
+              List.of(
+                  ErrorDto.builder()
+                      .errorCode(ErrorCode.BS01.getCode())
+                      .description(ErrorCode.BS01.getDescription())
+                      .invalidParameter(BOOK_ID)
+                      .build()));
         });
   }
 
   private void enrichBookAuthors(Book book, List<Long> authorIds) {
-    List<Map<String, Object>> errors = new ArrayList<>();
+    List<ErrorDto> errors = new ArrayList<>();
     for (Long id : authorIds) {
       Optional<Author> authorO = authorRepository.findById(id);
       if (authorO.isEmpty()) {
-        List<Map<String, Object>> list =
-            builder()
-                .errorCode(ErrorCode.BS01)
+        errors.add(
+            ErrorDto.builder()
+                .errorCode(ErrorCode.BS01.getCode())
                 .description(ErrorCode.BS01.getDescription())
-                .invalidParameter(id)
-                .build();
-        errors.addAll(list);
+                .invalidParameter(AUTHOR_ID)
+                .build());
       } else {
         book.addAuthor(authorO.get());
       }
     }
 
     if (!errors.isEmpty()) {
-      throw new GeneralException(HttpStatus.NOT_FOUND.value(), NO_AUTHOR_FOUND, errors);
+      throw new GeneralException(HttpStatus.NOT_FOUND.value(), errors);
     }
   }
 
@@ -127,15 +134,14 @@ public class BookServiceImpl implements BookService {
     return bookRepository
         .findById(bookId)
         .orElseThrow(
-            () -> {
-              throw new GeneralException(HttpStatus.NOT_FOUND.value(), NO_BOOK_FOUND, null);
-            });
-  }
-
-  private <T> Page<T> toPage(List<T> list, Pageable pageable) {
-    int start = (int) pageable.getOffset();
-    int end = Math.min((start + pageable.getPageSize()), list.size());
-    List<T> pageContent = list.subList(start, end);
-    return new PageImpl<>(pageContent, pageable, list.size());
+            () ->
+                new GeneralException(
+                    HttpStatus.NOT_FOUND.value(),
+                    List.of(
+                        ErrorDto.builder()
+                            .errorCode(ErrorCode.BS01.getCode())
+                            .description(ErrorCode.BS01.getDescription())
+                            .invalidParameter(BOOK_ID)
+                            .build())));
   }
 }

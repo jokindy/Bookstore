@@ -2,9 +2,9 @@ package com.example.bookstore.controller;
 
 import com.example.bookstore.dto.*;
 import com.example.bookstore.service.BookService;
+import com.example.bookstore.util.validation.ValidPageNumber;
+import com.example.bookstore.util.validation.ValidPageSize;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,17 +22,10 @@ public class BookController {
 
   private final BookService bookService;
 
-  @GetMapping("/all")
+  @GetMapping
   public ResponseEntity<PageableResultDto<BookDtoWithoutCover>> findAllBooks(
-      @Valid
-          @RequestParam(required = false, defaultValue = "20")
-          @Min(value = 1, message = "Minimum value is 1")
-          @Max(value = 100, message = "Maximum value is 100")
-          Integer pageSize,
-      @RequestParam(required = false, defaultValue = "0")
-          @Min(value = 0, message = "Minimum value is 0")
-          @Max(value = 2147483647, message = "Maximum value is 2147483647")
-          Integer pageNumber) {
+      @RequestParam(required = false, defaultValue = "20") @ValidPageSize Integer pageSize,
+      @RequestParam(required = false, defaultValue = "0") @ValidPageNumber Integer pageNumber) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.status(HttpStatus.OK).body(bookService.getBooks(pageable));
   }
@@ -40,15 +33,8 @@ public class BookController {
   @GetMapping("/name")
   public ResponseEntity<PageableResultDto<BookDtoWithoutCover>> findAllBooksByAuthorName(
       @RequestParam String authorName,
-      @Valid
-          @RequestParam(required = false, defaultValue = "20")
-          @Min(value = 1, message = "Minimum value is 1")
-          @Max(value = 100, message = "Maximum value is 100")
-          Integer pageSize,
-      @RequestParam(required = false, defaultValue = "0")
-          @Min(value = 0, message = "Minimum value is 0")
-          @Max(value = 2147483647, message = "Maximum value is 2147483647")
-          Integer pageNumber) {
+      @RequestParam(required = false, defaultValue = "20") @ValidPageSize Integer pageSize,
+      @RequestParam(required = false, defaultValue = "0") @ValidPageNumber Integer pageNumber) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.status(HttpStatus.OK)
         .body(bookService.getBooksByAuthorName(authorName, pageable));
@@ -56,15 +42,8 @@ public class BookController {
 
   @GetMapping("/unique")
   public ResponseEntity<PageableResultDto<String>> findAllUniqueBooks(
-      @Valid
-          @RequestParam(required = false, defaultValue = "20")
-          @Min(value = 1, message = "Minimum value is 1")
-          @Max(value = 100, message = "Maximum value is 100")
-          Integer pageSize,
-      @RequestParam(required = false, defaultValue = "0")
-          @Min(value = 0, message = "Minimum value is 0")
-          @Max(value = 2147483647, message = "Maximum value is 2147483647")
-          Integer pageNumber) {
+      @RequestParam(required = false, defaultValue = "20") @ValidPageSize Integer pageSize,
+      @RequestParam(required = false, defaultValue = "0") @ValidPageNumber Integer pageNumber) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize);
     return ResponseEntity.status(HttpStatus.OK).body(bookService.getUniqueBooks(pageable));
   }

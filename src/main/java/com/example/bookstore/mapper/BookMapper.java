@@ -8,7 +8,7 @@ import com.example.bookstore.dto.CreateBookResponse;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface BookMapper extends CommonMapper<BookDtoWithoutCover, Book, String> {
+public interface BookMapper extends CommonMapper<BookDtoWithoutCover, Book> {
 
   Book toBook(CreateBookRequest createBookRequest);
 
