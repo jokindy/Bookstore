@@ -96,6 +96,3 @@ To get started with the project, follow these steps:
 - Unit tests are available for testing each endpoint and service.
 - Run `mvn test` to execute the tests.
 - JaCoCo is used for code coverage analysis.
-
-## Contributors
-- List any contributors or team members who have contributed to the project.
