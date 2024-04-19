@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: 01-create-books-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 02-create-authors-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 03-create-book_author-table.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: 04-create-book_covers-table.yaml
+      relativeToChangelogFile: true
