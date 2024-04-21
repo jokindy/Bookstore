@@ -1,6 +1,7 @@
 package com.example.bookstore.service.impl;
 
 import static com.example.bookstore.util.CommonConstants.AUTHOR_ID;
+import static com.example.bookstore.util.CommonConstants.BOOK_COVER;
 import static com.example.bookstore.util.CommonConstants.BOOK_ID;
 
 import com.example.bookstore.domain.Author;
@@ -20,12 +21,12 @@ import com.example.bookstore.service.BookCoverService;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.util.ErrorCode;
 import com.example.bookstore.validator.FileValidator;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,7 @@ public class BookServiceImpl implements BookService {
 
   private final AuthorRepository authorRepository;
   private final BookCoverService bookCoverService;
+  private final FileValidator fileValidator;
   private final BookRepository bookRepository;
   private final BookMapper bookMapper;
 
@@ -69,21 +71,30 @@ public class BookServiceImpl implements BookService {
   }
 
   @Override
-  @SneakyThrows
   @Transactional
   public CreateBookResponse updateBook(UpdateBookRequest updateBookRequest) {
-    Book bookToUpdate = getBookById(updateBookRequest.getId());
+    fileValidator.validateBookCover(updateBookRequest.getCover());
 
-    bookToUpdate.setTitle(updateBookRequest.getTitle());
-    bookToUpdate.setYearOfRelease(updateBookRequest.getYearOfRelease());
+    try {
+      Book bookToUpdate = getBookById(updateBookRequest.getId());
 
-    FileValidator.validateBookCover(updateBookRequest.getCover());
-    bookToUpdate.getBookCover().setContent(updateBookRequest.getCover().getBytes());
+      bookToUpdate.setTitle(updateBookRequest.getTitle());
+      bookToUpdate.setYearOfRelease(updateBookRequest.getYearOfRelease());
+      bookToUpdate.getBookCover().setContent(updateBookRequest.getCover().getBytes());
+      bookToUpdate.setAuthors(new HashSet<>());
+      enrichBookAuthors(bookToUpdate, updateBookRequest.getAuthorIds());
 
-    bookToUpdate.setAuthors(new HashSet<>());
-    enrichBookAuthors(bookToUpdate, updateBookRequest.getAuthorIds());
-
-    return bookMapper.toCreateBookResponse(bookRepository.save(bookToUpdate));
+      return bookMapper.toCreateBookResponse(bookRepository.save(bookToUpdate));
+    } catch (IOException e) {
+      throw new GeneralException(
+          HttpStatus.BAD_REQUEST.value(),
+          List.of(
+              ErrorDto.builder()
+                  .errorCode(ErrorCode.BS04.getCode())
+                  .description(ErrorCode.BS04.getDescription())
+                  .invalidParameter(BOOK_COVER)
+                  .build()));
+    }
   }
 
   @Override

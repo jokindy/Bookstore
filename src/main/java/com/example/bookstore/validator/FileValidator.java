@@ -1,6 +1,7 @@
 package com.example.bookstore.validator;
 
-import static com.example.bookstore.util.CommonConstants.*;
+import static com.example.bookstore.util.CommonConstants.BOOK_COVER;
+import static com.example.bookstore.util.CommonConstants.BOOK_COVER_EXTENSION;
 import static java.util.Objects.isNull;
 
 import com.example.bookstore.error.ErrorDto;
@@ -10,13 +11,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+@Service
+@RequiredArgsConstructor
 public class FileValidator {
 
-  public static void validateBookCover(MultipartFile file) {
+  public void validateBookCover(MultipartFile file) {
     List<ErrorDto> errors = new ArrayList<>();
 
     if (isNull(file) || file.isEmpty()) {
@@ -41,7 +46,7 @@ public class FileValidator {
     }
   }
 
-  private static boolean isValidExtension(String fileName) {
+  private boolean isValidExtension(String fileName) {
     final String fileExtension =
         Objects.requireNonNull(FilenameUtils.getExtension(fileName)).toLowerCase();
     return Arrays.stream(FileExtension.values())

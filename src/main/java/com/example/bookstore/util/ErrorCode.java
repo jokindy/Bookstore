@@ -6,6 +6,7 @@ import lombok.Getter;
 public enum ErrorCode {
   SERVICE_UNAVAILABLE("", "Service temporary unavailable"),
   RS01("RS01", "Invalid credentials"),
+  RS02("RS02", "Resource not found"),
   BS01("BS01", "Parameter is invalid (id)"),
   BS02("BS02", "Parameter is invalid (dto field)"),
   BS03("BS03", "Required parameter is missing"),

@@ -259,19 +259,16 @@
 								{
 									"key": "cover",
 									"type": "file",
-									"src": [
-										"/C:/Users/Андрей/Pictures/photo_2022-08-15_01-48-20.jpg",
-										"/C:/Users/Андрей/Pictures/photo_2022-08-15_01-48-20.jpg"
-									]
+									"src": "/C:/Users/Андрей/Pictures/photo_2022-05-05_13-47-09.jpg"
 								},
 								{
 									"key": "title",
-									"value": "Holy Bible",
+									"value": "Polals",
 									"type": "text"
 								},
 								{
 									"key": "yearOfRelease",
-									"value": "1474",
+									"value": "1578",
 									"type": "text"
 								},
 								{
@@ -304,7 +301,7 @@
 								{
 									"key": "cover",
 									"type": "file",
-									"src": "/C:/Users/Андрей/Pictures/photo_2022-05-05_13-47-09.jpg"
+									"src": "/C:/Users/Андрей/Pictures/photo_2022-08-15_01-48-20.jpg"
 								},
 								{
 									"key": "title",
@@ -356,21 +353,11 @@
 				{
 					"name": "POST new author",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJFM2s1VnpPZG5JYjNKTlpJRTJvTnplNElUdzd3b2U1NFVDQnNoaHdqUDNZIn0.eyJleHAiOjE3MTMzNjcwNzksImlhdCI6MTcxMzM2Njc3OSwianRpIjoiOWY3M2FiNDktNGFhMS00NjUwLTlmMTQtM2Y3ZTg1OWEzYWQ5IiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo4NDg0L3JlYWxtcy9Cb29rU3RvcmUiLCJzdWIiOiJlNWQwM2RjMC0wYjY0LTQ5YmUtOTU1MS01MmEzOWVhZGZmZmMiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJsb2dpbi1hcHAiLCJzZXNzaW9uX3N0YXRlIjoiMmYxOTE1NzItY2ZjMy00MDYxLTk3OTYtOWM5YTQwNGNiZGEyIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyJodHRwOi8vbG9jYWxob3N0OjgwODAiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImFwcF91c2VyIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsibG9naW4tYXBwIjp7InJvbGVzIjpbInVzZXIiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJzaWQiOiIyZjE5MTU3Mi1jZmMzLTQwNjEtOTc5Ni05YzlhNDA0Y2JkYTIiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6IkpvaG4gRG9lIiwicHJlZmVycmVkX3VzZXJuYW1lIjoidXNlcjEiLCJnaXZlbl9uYW1lIjoiSm9obiIsImZhbWlseV9uYW1lIjoiRG9lIiwiZW1haWwiOiJqb2huZG9lQG1haWwuY29tIn0.G_i_xGFo_Hh2kxPnTpZekVxLUVn3pNe5mNOlFn4lFiSn1ru_Bqr2gtZp_ldaQh8O55-d5oC5BXzOeIrcIwa0WRgf3dLrQhLdDwuT1Uf9xh8PxU0JHwG0QR6y1CPbC1cQ2QGkyeAIR2v1QTUYnQQuFHyomyDSPw-DdASusnTrOpZYE0tO8uueDF85VyLjE5enZ0Hr23UWcyHfb35hV1xl7xqg8ucQWVoFDLOF0h0ZomInxJ82cxei8u0u3zVchkGnOUA5ZkA3wuzH2DKxbIUWt2R8Ec-lTdzWQ3je7EaomfBQ7DuIVtR2W3OZ4oV83rw3hJx9S4jeVjb5sZ2Ay7LJKQ",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Madame Web\",\r\n    \"birthdate\": \"1985-04-04\",\r\n    \"countryOfOrigin\": \"Spider-Verse\"\r\n}",
+							"raw": "{\r\n    \"name\": \"Madame Web\",\r\n    \"birthdate\": \"1958-04-30\",\r\n    \"countryOfOrigin\": \"Spider-Verse\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

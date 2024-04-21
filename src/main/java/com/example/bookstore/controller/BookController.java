@@ -1,6 +1,11 @@
 package com.example.bookstore.controller;
 
-import com.example.bookstore.dto.*;
+import com.example.bookstore.dto.BookDto;
+import com.example.bookstore.dto.BookDtoWithoutCover;
+import com.example.bookstore.dto.CreateBookRequest;
+import com.example.bookstore.dto.CreateBookResponse;
+import com.example.bookstore.dto.PageableResultDto;
+import com.example.bookstore.dto.UpdateBookRequest;
 import com.example.bookstore.service.BookService;
 import com.example.bookstore.util.validation.ValidPageNumber;
 import com.example.bookstore.util.validation.ValidPageSize;
@@ -12,11 +17,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Validated
 @RestController
-@RequestMapping(path = "/books")
+@RequestMapping(path = "/api/v1/books")
 @RequiredArgsConstructor
 public class BookController {
 
