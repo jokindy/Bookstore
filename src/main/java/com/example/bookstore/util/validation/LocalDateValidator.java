@@ -15,11 +15,9 @@ public class LocalDateValidator implements ConstraintValidator<ValidLocalDate, S
   @Override
   public boolean isValid(String value, ConstraintValidatorContext context) {
     try {
-      System.out.println("WWWWWWWWWWWW");
       LocalDate.parse(value);
       return true;
     } catch (DateTimeParseException e) {
-      System.out.println("AAAAA");
       return false;
     }
   }
