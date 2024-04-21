@@ -1,13 +1,10 @@
 package com.example.bookstore.error;
 
 import static com.example.bookstore.util.CommonConstants.BOOK_COVER_SIZE;
-import static com.example.bookstore.util.CommonConstants.DATE;
 
 import com.example.bookstore.util.ErrorCode;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
-import java.time.DateTimeException;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -106,18 +103,6 @@ public class ErrorController {
                     ErrorCode.BS04.getDescription(),
                     BOOK_COVER_SIZE,
                     null)));
-    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-  }
-
-  @ExceptionHandler
-  public ResponseEntity<Error> handleDateTimeException(DateTimeParseException exception) {
-    log.error(exception.getMessage(), exception);
-
-    Error error =
-        new Error(
-            List.of(
-                buildErrorDto(
-                    ErrorCode.BS05.getCode(), ErrorCode.BS05.getDescription(), DATE, null)));
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
   }
 
